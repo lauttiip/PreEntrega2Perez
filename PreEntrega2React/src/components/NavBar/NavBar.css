@@ -1,0 +1,60 @@
+*{
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body{
+    font-family: "Protest Guerrilla", sans-serif;
+}
+
+.navbar{
+    display: flex;
+    border: 2px solid black;
+    height: 100px;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 10px;
+}
+
+.navbar a:hover{
+    color: brown;
+}
+
+.navbar a{
+    color: rgb(210, 57, 30);
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 1.6rem;
+}
+
+.navbarLinks{
+    list-style: none;
+    display: flex;
+    width: auto;
+    gap: 9.25rem;
+    justify-content: space-around;
+}
+
+.navbarItem{
+    font-size: 1.3rem;
+}
+
+.logo{
+    height: 50px;
+}
+
+.carrito{ 
+    position: relative;
+}
+
+.badge{
+    position: absolute;
+    top: 0;
+    right: 0;
+    background-color: brown;
+    color: white;
+    padding: 3px 8px;
+    border-radius: 50%;
+    transform: translate(20% ,-50%);
+}
