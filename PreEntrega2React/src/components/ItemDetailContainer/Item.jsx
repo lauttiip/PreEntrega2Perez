@@ -1,51 +1,41 @@
 import "./item.css"
-import { useState, useEffect } from "react"
-import { gorras } from "../../data/productos"
+import { useState, useEffect, useContext } from "react"
 import { useParams } from "react-router-dom"
+import { GlobalContext } from "../../Context/ContextGlobal"
+import Counter from "../Counter"
+import { CartContext } from "../CartWidget/CartContext"
 
 function Item() {
-    
-    const [data, setData]=useState([])
-    const [loading, setLoading]=useState(true)
-  
-    const {idItem}=useParams()
-  
-  
-    useEffect(() => {
-      const traerProductos = () => {
-        setLoading(true)
-        return new Promise(resolve => {
-          setTimeout(() => {
-            resolve(gorras)
-          },1000)
-        })
-      }
-  
-      traerProductos().then(res => {
-        setLoading(false)
-          const newGorras = res.filter((gorra) => gorra.id === parseInt(idItem))
-          setData(newGorras)
-          console.log(newGorras)
 
-        }
-      )
-    },[idItem])
-  
-    if(loading){
-      return <h2>Loading...</h2>
-    }
-  
-    return (
-        <div className="container">
-        
-            <div className="card" key={data[0].id}>
-              <h2>{data[0].nombre}</h2>
-              <h2>{data[0].descripcion}</h2>
-              <p>{data[0].precio}</p>
-            </div>
- 
+  const [item, setItem] = useState([])
+
+  const { idItem } = useParams()
+  const { data, loading } = useContext(GlobalContext)
+  const {cart, addToCart, removeFromCart, checkout, totalItems}= useContext(CartContext)
+
+
+  useEffect(() => {
+    setItem(data.find((gorra) => gorra.id === idItem))
+  }, [idItem])
+
+  if (loading) {
+    return <h2>Loading...</h2>
+  }
+
+
+  return (
+    <div className="container">
+
+      <div className="card" key={item.id}>
+        <h2>{item.title}</h2>
+        <h2>{item.description}</h2>
+        <p>${item.price}</p>
+        <p>Stock: {item.stock}</p>
+        <Counter stock={item.stock} item={item} />
       </div>
-    )
+
+    </div>
+  )
 }
 
 

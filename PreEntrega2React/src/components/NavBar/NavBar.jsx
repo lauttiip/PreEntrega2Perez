@@ -1,6 +1,6 @@
 import logo from "../../assets/logo.png"
 import "./NavBar.css"
-import CardWidget from '../CardWidget/CardWidget'
+import CardWidget from '../CartWidget/CartWidget'
 import { Link } from "react-router-dom"
 function NavBar() {
   return (
@@ -14,7 +14,7 @@ function NavBar() {
             <Link className="navbarItem" to="/categoria/59FIFTY">59 Fifty</Link>
             <Link className="navbarItem" to="/categoria/GOLFER">Golfer</Link>
         </ul>
-        <CardWidget/>
+        <Link to="/checkOut"><CardWidget/></Link>
     </nav>
 )
 }

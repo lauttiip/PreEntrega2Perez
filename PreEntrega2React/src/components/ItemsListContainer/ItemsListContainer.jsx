@@ -1,55 +1,48 @@
 import "./ItemListContainer.css"
-import { useState, useEffect } from "react"
-import { gorras } from "../../data/productos"
+import { useState, useEffect, useContext } from "react"
 import { useParams } from "react-router-dom"
 import { Link } from "react-router-dom"
+import { GlobalContext } from "../../Context/ContextGlobal"
 
 
 
 function ItemsListContainer() {
 
-  const [data, setData]=useState([])
-  const [loading, setLoading]=useState(true)
+  const { data,loading } = useContext(GlobalContext)
+  const [dataGorras, setDataGorras] = useState([])
 
-  const {idCategoria}=useParams()
+  const { idCategoria } = useParams()
 
 
   useEffect(() => {
     const traerProductos = () => {
-      setLoading(true)
-      return new Promise(resolve => {
-        setTimeout(() => {
-          resolve(gorras)
-        },1000)
-      })
+      if (idCategoria) {
+        const newGorras = data.filter((gorra) => gorra.categoryId === idCategoria)
+        setDataGorras(newGorras)
+      } else {
+        setDataGorras(data)
+      }
     }
+    traerProductos()
+  }, [data, idCategoria])
 
-    traerProductos().then(res => {
-      setLoading(false)
-      if(idCategoria){
-        const newGorras = res.filter((gorra) => gorra.categoria === idCategoria)
-        setData(newGorras)
-      }else {setData(res)}
-    })
-  },[idCategoria])
-
-  if(loading){
+  if (loading) {
     return <h2>Loading...</h2>
   }
 
-
   return (
     <div className="container">
-      {data.map(prod => (
-
-        <Link to={'/item/'+ prod.id}>
-          <div className="card" key={prod.id}>
-            <h2>{prod.nombre}</h2>
-            <h2>{prod.descripcion}</h2>
-            <p>{prod.precio}</p>
-          </div>
-        </Link>
-      ))}
+      {
+        dataGorras.map(prod => (
+          <Link to={'/item/' + prod.id} key={prod.id}>
+            <div className="card">
+              <h2>{prod.title}</h2>
+              <h2>{prod.description}</h2>
+              <p>{prod.price}</p>
+            </div>
+          </Link>
+        ))
+      }
     </div>
   )
 }
