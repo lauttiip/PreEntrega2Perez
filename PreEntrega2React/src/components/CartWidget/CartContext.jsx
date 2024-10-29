@@ -1,67 +1,73 @@
-// src/Context/CartContext.js
-import React, { createContext, useState } from "react";
+import { createContext, useState } from "react"
+import Swal from 'sweetalert2'
 
-export const CartContext = createContext();
+export const CartContext = createContext()
 
 export const CartProvider = ({ children }) => {
-  const [cart, setCart] = useState([]);
+  const [cart, setCart] = useState([])
 
-  // Función para añadir un producto al carrito
   const addToCart = (product, quantity) => {
     setCart(prevCart => {
-      const existingProduct = prevCart.find(item => item.id === product.id);
-      
-      // Verificar si el producto ya existe en el carrito
+      const existingProduct = prevCart.find(item => item.id === product.id)
+
       if (existingProduct) {
-        // Calcular la cantidad total si se añade el producto de nuevo
-        const totalQuantity = existingProduct.quantity + quantity;
-        
-        // Si la cantidad total supera el stock, no añadir más
+        const totalQuantity = existingProduct.quantity + quantity
+
         if (totalQuantity > product.stock) {
-          alert(`No se pueden añadir más de ${product.stock} unidades de este producto.`);
-          return prevCart;
+          Swal.fire({
+            title: 'Error!',
+            text: `No se pueden añadir más de ${product.stock} unidades de este producto.`,
+            icon: 'error',
+            confirmButtonText: 'Ok'
+          })
+          return prevCart
         }
-        
-        // Actualizar la cantidad si está dentro del límite de stock
+
         return prevCart.map(item =>
           item.id === product.id
             ? { ...item, quantity: totalQuantity }
             : item
-        );
+        )
       } else {
-        // Si el producto no está en el carrito, añadirlo si no supera el stock
         if (quantity > product.stock) {
-          alert(`No se pueden añadir más de ${product.stock} unidades de este producto.`);
-          return prevCart;
+          Swal.fire({
+            title: 'Error!',
+            text: `No se pueden añadir más de ${product.stock} unidades de este producto.`,
+            icon: 'error',
+            confirmButtonText: 'Ok'
+          })
+          return prevCart
         }
-        return [...prevCart, { ...product, quantity }];
+        return [...prevCart, { ...product, quantity }]
       }
-    });
-  };
+    })
+  }
 
-  // Función para eliminar un producto del carrito
   const removeFromCart = productId => {
-    setCart(prevCart => prevCart.filter(item => item.id !== productId));
-  };
-  const removeAllFromCart = ()=> {
-    setCart([]);
-  };
+    setCart(prevCart => prevCart.filter(item => item.id !== productId))
+  }
+  const removeAllFromCart = () => {
+    setCart([])
+  }
 
 
-  // Función para vaciar el carrito al hacer checkout
   const checkout = () => {
-    setCart([]);
-    alert("Compra realizada exitosamente.");
-  };
+    setCart([])
+    Swal.fire({
+      title: 'Compra confirmada!',
+      text: `Su compra ha sido realizada con exito`,
+      icon: 'success',
+      confirmButtonText: 'Ok'
+    })
+  }
 
-  // Obtener el total de artículos en el carrito
-  const totalItems = cart.reduce((total, item) => total + item.quantity, 0);
+  const totalItems = cart.reduce((total, item) => total + item.quantity, 0)
 
   return (
     <CartContext.Provider
-      value={{ cart, addToCart, removeFromCart, checkout, totalItems,removeAllFromCart }}
+      value={{ cart, addToCart, removeFromCart, checkout, totalItems, removeAllFromCart }}
     >
       {children}
     </CartContext.Provider>
-  );
-};
+  )
+}

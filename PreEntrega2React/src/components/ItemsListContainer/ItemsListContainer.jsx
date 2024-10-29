@@ -8,7 +8,7 @@ import { GlobalContext } from "../../Context/ContextGlobal"
 
 function ItemsListContainer() {
 
-  const { data,loading } = useContext(GlobalContext)
+  const { data, loading } = useContext(GlobalContext)
   const [dataGorras, setDataGorras] = useState([])
 
   const { idCategoria } = useParams()
